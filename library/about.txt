@@ -1,0 +1,4 @@
+this is a simple library JS application, which allows to add new books to the list of books using a form, then toggle the read status
+and deleting each book if needed
+
+* it does not store these book anywhere, not in cache nor as cookies

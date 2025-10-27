@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        div{
+            background-color: grey;
+            width:40%;
+            padding:20px;
+            margin: 10px;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <form id="new_book_form">
+        <input type="text" placeholder="Title">
+        <input type="text" placeholder="Author">
+        <input type="number" placeholder="Pages">
+        <button type="submit" >Submit</button>
+    </form>
+
+    <button id="new_book">Add new</button>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let form = document.getElementById('new_book_form');
+            form.style.display = 'none';
+
+            document.getElementById('new_book').addEventListener('click',toggle_form);
+
+            document.getElementById('new_book_form').addEventListener('submit',submit_form);
+        });
+
+        
+
+        const myLibrary = [];
+
+        // Books constructor
+        function Book(author,title,pages) {
+        this.id = crypto.randomUUID();
+        this.author = author;
+        this.title = title;
+        this.pages = pages;
+        this.read = false;
+        }
+
+
+        // adding 2 books to start with
+        let book1 = new Book('steven','book title',44);
+        let book2 = new Book('author 2','the other book',60);
+        myLibrary.push(book1,book2);
+        
+
+        // calling the function to display all books on the page
+        myLibrary.forEach((book)=> add_book(book));
+
+
+
+        // function adds books from the book array to the page
+        function add_book(book){
+            let container = document.createElement('div');
+            container.setAttribute('data-id',book.id);
+
+            let id = document.createElement('p');
+            id.textContent = `ID: ${book.id}`;
+            container.appendChild(id);
+
+            let title = document.createElement('h1');
+            let author = document.createElement('h4');
+            let pages = document.createElement('p');
+            let read = document.createElement('p');
+
+            title.textContent = `Title: ${book.title}`;
+            author.textContent = `Author: ${book.author}`;
+            pages.textContent = `Pages: ${book.pages}`;
+            read.textContent = `Read status: ${book.read}`;
+
+            // creating buttons
+            let toggle_read = document.createElement('button');
+            toggle_read.textContent = 'Toggle Read Status';
+            toggle_read.addEventListener('click',()=>{
+                book.read = !book.read;
+                read.textContent = `Read status: ${book.read}`;
+            });
+            let delete_book = document.createElement('button');
+            delete_book.textContent = 'Delete Book';
+            delete_book.addEventListener('click',()=>{
+                let index = myLibrary.findIndex((b)=> b.id === book.id);
+                if(index !== -1){
+                    myLibrary.splice(index,1);
+                    document.body.removeChild(container);
+                }
+            });
+
+            // append buttons
+            container.append(title,author,pages,read, toggle_read, delete_book);
+
+            // append container to body
+            document.body.appendChild(container);
+        }
+
+        function toggle_form(){
+            let form = document.getElementById('new_book_form');
+            form.style.display = form.style.display == 'none' ? 'block' : 'none';
+        }
+
+        function submit_form(event){
+            event.preventDefault();
+
+            let title = event.target[0].value;
+            let author = event.target[1].value;
+            let pages = event.target[2].value;
+
+            let new_book = new Book(author,title,pages);
+            myLibrary.push(new_book);
+            add_book(new_book);
+
+            event.target.reset();
+            toggle_form();
+        }
+
+
+    </script>
+</body>
+</html>
