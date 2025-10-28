@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        
+        #board button {
+            width: 100px;
+            height: 100px;
+            font-size: 24px;
+        }
+
+        #winnerContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(255, 90, 90);
+            display: none;
+            margin: auto;
+            width: 50%;
+            height: 200px;
+
+            position: absolute;
+            top: 40%;
+            left: 25%;
+        }
+        #winnerName {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!--   Game board  -->
+    <div id="gameBoard">
+        <h1 id="currentPlayer"></h1>
+        <div id="board"></div>
+        
+
+        <h2>Score</h2>
+        <h4 id="player1Score"></h4>
+        <h4 id="player2Score"></h4>
+    </div>
+
+    <!--  Players names form  -->
+    <div id="playersNames">
+        <label for="player1">Player 1 Name:</label>
+        <input type="text" id="player1" name="player1">
+        <br>
+        <label for="player2">Player 2 Name:</label>
+        <input type="text" id="player2" name="player2"><br>
+        <input type="button" value="Start Game" />
+    </div>
+
+    <!--  Winner aler container  -->
+    <div id="winnerContainer">
+        <h1 id="winnerName"></h1><br>
+        <button id="again" >Play again!</button>
+    </div>
+
+    <script>
+        let Gameboard = (() => {
+            let board = ["", "", "", "", "", "", "", "", ""];
+
+            const setCell = (index, symbol) => {
+                if (index >= 0 && index < 9 && board[index] === "") {
+                    board[index] = symbol;
+                    return true;
+                }
+                return false;
+            };
+
+            const getBoard = () => board;
+
+            const resetBoard = () => {
+                board = ["", "", "", "", "", "", "", "", ""];
+            };
+
+            return { setCell, getBoard, resetBoard };
+        })();
+
+        let Player = (name, symbol, score) => {
+            return { name, symbol, score };
+        };
+
+        let GameController = (() => {
+            let players = [];
+            let currentPlayerIndex = 0;
+            let gameOver = false;
+
+            const initPlayers = (name1, name2) => {
+                players = [
+                    Player(name1, "X", 0),
+                    Player(name2, "O", 0)
+                ];
+                updateScores();
+            };
+
+            const switchPlayer = () => {
+                currentPlayerIndex = 1 - currentPlayerIndex;
+            };
+
+            const getCurrentPlayer = () => players[currentPlayerIndex];
+
+            const checkWin = () => {
+                const b = Gameboard.getBoard();
+                const winConditions = [
+                    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                    [0, 4, 8], [2, 4, 6]
+                ];
+
+                for (let condition of winConditions) {
+                    const [a, bIndex, c] = condition;
+                    if (b[a] && b[a] === b[bIndex] && b[a] === b[c]) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            const makeMove = (index) => {
+                if (gameOver) return;
+
+                const player = getCurrentPlayer();
+                if (Gameboard.setCell(index, player.symbol)) {
+                    createBoard(); // Update the UI
+                    
+                    if (checkWin()) {
+                        gameOver = true;
+                        player.score++; // Increase the winner's score
+                        updateScores(); // Update the score display
+                        document.getElementById('winnerName').textContent = `Winner: ${player.name}`;
+                        document.getElementById('winnerContainer').style.display = 'flex';
+                    } else {
+                        switchPlayer();
+                        document.getElementById('currentPlayer').textContent = `Current Player: ${getCurrentPlayer().name}`;
+                    }
+                }
+            };
+
+            const resetGame = () => {
+                document.getElementById('winnerName').textContent = "";
+                document.getElementById('winnerContainer').style.display = 'none';
+                currentPlayerIndex = 0;
+                document.getElementById('currentPlayer').textContent = `Current Player: ${getCurrentPlayer().name}`;
+
+                Gameboard.resetBoard();
+                gameOver = false;
+            };
+
+            const updateScores = () => {
+                document.getElementById('player1Score').textContent = `${players[0].name}: ${players[0].score}`;
+                document.getElementById('player2Score').textContent = `${players[1].name}: ${players[1].score}`;
+            };
+
+            return { initPlayers, makeMove, resetGame };
+        })();
+
+        function createBoard() {
+            const boardDiv = document.getElementById('board');
+            boardDiv.innerHTML = '';
+            const board = Gameboard.getBoard();
+            
+            board.forEach((cell, index) => {
+                const cellButton = document.createElement('button');
+                cellButton.textContent = cell;
+                cellButton.addEventListener('click', () => GameController.makeMove(index));
+                boardDiv.appendChild(cellButton);
+            });
+        }
+
+        
+
+        document.getElementById('again').addEventListener('click', () => {
+            GameController.resetGame();
+            createBoard();
+        });
+
+        document.querySelector('#playersNames input[type="button"]').addEventListener('click', () => {
+            const player1Name = document.getElementById('player1').value || "Player 1";
+            const player2Name = document.getElementById('player2').value || "Player 2";
+            GameController.initPlayers(player1Name, player2Name);
+            GameController.resetGame();
+            document.getElementById('currentPlayer').textContent = `Current Player: ${player1Name}`;
+            document.getElementById('gameBoard').style.display = 'block';
+            document.getElementById('playersNames').style.display = 'none';
+            createBoard();
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById('gameBoard').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
