@@ -1,3 +1,5 @@
 tic tac toe game using JS
 
+An interactive browser game for 2 players
+
 practicing factory functions and closure functions, also private variables
