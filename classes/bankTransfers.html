@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class BankAccount{
+            constructor(accNr, name, balance=0){
+                this.accNr = accNr;
+                this.name = name;
+                this.balance = balance;
+
+            }
+
+            withdraw(amount) {
+                if (amount <= this.balance) {
+                this.balance -= amount;
+                } else {
+                document.write(`Insufficient balance in account ${this.accountNumber}. <br>`);
+                }
+            }
+
+            deposit(amount){
+                this.balance += amount;
+            }
+
+            transfer(amount, recipientAccount) {
+                if (amount <= this.balance) {
+                this.balance -= amount;
+                recipientAccount.deposit(amount);
+                } else {
+                document.write(`Insufficient balance in account ${this.accountNumber} for transfer. <br>`);
+                }
+            }
+
+            displayBalance() {
+                document.write(`Account ${this.accNr} balance: $${this.balance} <br>`);
+            }
+        }
+
+        // Create multiple instances of the BankAccount class
+        const account1 = new BankAccount('SB-012', 'Karishma Hedy', 2000);
+        const account2 = new BankAccount('SB-019', 'Phokas Intan', 3000);
+
+        // Transactions on the bank accounts
+        account1.displayBalance(); // Account SB-012 balance: $2000
+        account2.displayBalance(); // Account SB-019 balance: $3000
+
+        account1.deposit(500); // Amount $500 deposited into account SB-012.
+        account1.displayBalance(); // Account SB-012 balance: $2500
+
+        account1.withdraw(200); // Amount $200 withdrawn from account SB-012.
+        account1.displayBalance(); // Account SB-012 balance: $2300
+
+        account1.transfer(700, account2); // Amount $700 transferred from account SB-01 to account SB-019.
+        account1.displayBalance(); // Account SB-012 balance: $1600
+        account2.displayBalance(); // Account SB-019 balance: $3700
+    </script>
+</body>
+</html>

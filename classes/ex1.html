@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Person{
+            constructor(name,age,country){
+                this.name = name;
+                this.age = age;
+                this.country = country;
+
+            }
+
+            info(){
+                return `${this.name} has ${this.age} years and is from ${this.country} <br>`;
+            }
+        }
+
+        const person1 = new Person('John', 22, "Canada");
+        const person2 = new Person('Micky', 23, "USA");
+        
+        document.write(person1.info());
+        document.write(person2.info());
+    </script>
+</body>
+</html>

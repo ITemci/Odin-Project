@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class BankAccount{
+            constructor(accountNr){
+                this.accountNr = accountNr;
+                this.balance = 0;
+            }
+
+            deposit(amount){
+                this.balance += amount;
+            }
+
+            withdraw(amount){
+                this.balance -= amount;
+            }
+
+            info(){
+                document.write(`${this.accountNr} has ${this.balance} <br>`);
+            }
+        }
+
+        let acc1 = new BankAccount(111);
+        acc1.info();
+
+        acc1.deposit(100);
+        acc1.info();
+
+        acc1.withdraw(50);
+        acc1.info();
+    </script>
+</body>
+</html>

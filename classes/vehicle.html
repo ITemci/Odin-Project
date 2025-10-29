@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Vehicle{
+            constructor(make,model,year){
+                this.make = make;
+                this.model = model;
+                this.year = year;
+            }
+
+            info(){
+                return `${this.make} ${this.model} ${this.year}`;
+            }
+        }
+
+        let veh1 = new Vehicle('BMW','series 3', '1999 <br>');
+
+        document.write(veh1.info());
+
+
+        class Car extends Vehicle{
+            constructor(make,model,year,doors){
+                super(make,model,year);
+                this.doors = doors;
+            }
+
+            info(){
+                return `${this.make} ${this.model} ${this.year} has ${this.doors} doors`;
+            }
+        }
+
+        let car1 = new Car('Merc','class C', '2002', 4);
+
+        document.write(car1.info());
+    </script>
+</body>
+</html>
