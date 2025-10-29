@@ -82,13 +82,14 @@
             pages.textContent = `Pages: ${book.pages}`;
             read.textContent = `Read status: ${book.read}`;
 
-            // creating buttons
+            // creating buttons delete and toggle read status
             let toggle_read = document.createElement('button');
             toggle_read.textContent = 'Toggle Read Status';
             toggle_read.addEventListener('click',()=>{
                 book.read = !book.read;
                 read.textContent = `Read status: ${book.read}`;
             });
+
             let delete_book = document.createElement('button');
             delete_book.textContent = 'Delete Book';
             delete_book.addEventListener('click',()=>{
@@ -99,7 +100,7 @@
                 }
             });
 
-            // append buttons
+            // append elements to container
             container.append(title,author,pages,read, toggle_read, delete_book);
 
             // append container to body
