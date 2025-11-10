@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Carousel</title>
+  <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        }
+
+        .carousel-container {
+        position: relative;
+        width: 800px;
+        height: 450px;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        background: #000;
+        }
+
+        .carousel-slide {
+        display: flex;
+        width: 3200px; /* 4 images × 800px width */
+        transition: transform 0.3s ease;
+        }
+
+        .carousel-slide img {
+        width: 800px;
+        height: 400px;
+        object-fit: cover;
+        }
+
+        /* Arrows */
+        .prev, .next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0,0,0,0.5);
+        border: none;
+        color: white;
+        font-size: 30px;
+        padding: 10px;
+        cursor: pointer;
+        border-radius: 50%;
+        user-select: none;
+        }
+
+        .prev { left: 15px; }
+        .next { right: 15px; }
+
+        .prev:hover, .next:hover {
+        background-color: rgba(0,0,0,0.8);
+        }
+
+        /* Dots */
+        .dots-container {
+        text-align: center;
+        position: absolute;
+        bottom: 15px;
+        width: 100%;
+        }
+
+        .dot {
+        height: 15px;
+        width: 15px;
+        margin: 0 5px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        cursor: pointer;
+        }
+
+        .dot.active {
+        background-color: white;
+        }
+
+  </style>
+</head>
+<body>
+
+    <!-- Attempted a simple image carousel 4 slides using JS-->
+
+  <div class="carousel-container">
+    <div class="carousel-slide">
+      <img src="https://picsum.photos/id/1018/800/400" alt="Slide 1">
+      <img src="https://picsum.photos/id/1025/800/400" alt="Slide 2">
+      <img src="https://picsum.photos/id/1035/800/400" alt="Slide 3">
+      <img src="https://picsum.photos/id/1040/800/400" alt="Slide 4">
+    </div>
+
+    <!-- Navigation arrows -->
+    <button class="prev">&#10094;</button>
+    <button class="next">&#10095;</button>
+
+    <!-- Navigation dots -->
+    <div class="dots-container">
+      <span class="dot" data-index="0"></span>
+      <span class="dot" data-index="1"></span>
+      <span class="dot" data-index="2"></span>
+      <span class="dot" data-index="3"></span>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelector('.carousel-slide');
+        const images = document.querySelectorAll('.carousel-slide img');
+        const prevBtn = document.querySelector('.prev');
+        const nextBtn = document.querySelector('.next');
+        const dots = document.querySelectorAll('.dot');
+
+        let counter = 0;
+        const totalSlides = images.length;
+        let slideInterval;
+
+        // Show a specific slide
+        function showSlide(index) {
+        counter = (index + totalSlides) % totalSlides;
+        slides.style.transform = `translateX(${-800 * counter}px)`;
+        updateDots();
+        }
+
+        // Update dots
+        function updateDots() {
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[counter].classList.add('active');
+        }
+
+        // Next/Previous functions
+        function nextSlide() {
+        showSlide(counter + 1);
+        }
+
+        function prevSlide() {
+        showSlide(counter - 1);
+        }
+
+        // Auto advance every 5 seconds
+        function startAutoSlide() {
+        slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopAutoSlide() {
+        clearInterval(slideInterval);
+        }
+
+        // Event listeners
+        nextBtn.addEventListener('click', () => {
+        nextSlide();
+        stopAutoSlide();
+        startAutoSlide();
+        });
+
+        prevBtn.addEventListener('click', () => {
+        prevSlide();
+        stopAutoSlide();
+        startAutoSlide();
+        });
+
+        dots.forEach(dot => {
+        dot.addEventListener('click', (e) => {
+            const index = parseInt(e.target.getAttribute('data-index'));
+            showSlide(index);
+            stopAutoSlide();
+            startAutoSlide();
+        });
+        });
+
+        // Initialize
+        showSlide(0);
+        startAutoSlide();
+
+  </script>
+</body>
+</html>

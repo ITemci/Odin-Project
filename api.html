@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type='text' placeholder="search for GIF" id="search"/>
+    <input type="button" value='search' id="search_btn"/>
+    <img src="#"/>
+
+    <!-- JavaScript to fetch and display GIFs from Giphy API -->
+     <!-- type the word in search box and hit search button to generate new GIF, requests are limited-->
+     
+
+    <script>
+        
+
+        document.addEventListener('DOMContentLoaded',()=>{
+            const img = document.querySelector('img');
+            const searchBtn = document.getElementById('search_btn');
+
+            searchBtn.addEventListener('click',()=>{
+                const searchInput = document.getElementById('search').value;
+                fetch(`https://api.giphy.com/v1/gifs/translate?api_key=YNpujyzhBSfRTQJSsJMhGDSAGxcVZNl6&s=${searchInput}`)
+                .then(function(response) {
+                return response.json();
+                })
+                .then(function(response) {
+                img.src = response.data.images.original.url;
+                });
+            });
+
+        });
+
+
+
+        
+    </script>
+
+</body>
+</html>
